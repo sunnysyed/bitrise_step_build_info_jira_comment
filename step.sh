@@ -40,16 +40,14 @@ then
 	if [ "$LAST_COMMIT" = "${MERGES[0]}" ];
 	then
 		echo "${green}✅ Merge commit detected. Searching for tasks in merge commits messages...${cyan}"
+		pat= "$project_prefix[0-9]{1,5}"
 		for (( i=0 ; i<${#MERGES[*]} ; ++i ))
 		do
 			echo $'\t'"📜 "${MERGES[$i]}
-		done
-
-		for task in $(echo $MERGES | grep "$project_prefix[0-9]{1,5}" -E -o || true | sort -u -r --version-sort)
-		do
-            if [[ ! " ${TASKS[@]} " =~ " ${task} " ]]; then
-                TASKS+=($task)
-            fi
+			if echo ${MERGES[$i]} | grep -q -E "^$project_prefix[0-9]{1,5}.*$"; then
+				[[ ${MERGES[$i]} =~ $pat ]]
+				TASKS+=(${BASH_REMATCH[0]})
+			fi
 		done
 	else
 		echo "${magenta}☑️  Not a merge commit. Searching for tasks in current commit message...${cyan}"
