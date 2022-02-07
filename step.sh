@@ -40,7 +40,7 @@ then
 	if [ "$LAST_COMMIT" = "${MERGES[0]}" ];
 	then
 		echo "${green}✅ Merge commit detected. Searching for tasks in merge commits messages...${cyan}"
-		pat= "$project_prefix[0-9]{1,5}"
+		pat="$project_prefix[0-9]{1,5}"
 		for (( i=0 ; i<${#MERGES[*]} ; ++i ))
 		do
 			echo $'\t'"📜 "${MERGES[$i]}
